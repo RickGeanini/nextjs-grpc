@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package clientService;
+
+message ClientRequest {
+  uint32 id = 1;
+}
+
+message ClientResponse {
+  uint32 id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  uint32 age = 4;
+  string email = 5;
+  bool active = 6;
+}
+
+message ClientsResponse {
+  repeated ClientResponse items = 2;
+}
+
+message Null {};
+
+service ClientServiceRoutes {
+  rpc client(ClientRequest) returns (ClientResponse) {}
+  rpc clients(Null) returns (ClientsResponse) {}
+}

@@ -1,4 +1,4 @@
-// Original file: ../grpc/proto/clientService.proto
+// Original file: src/proto/clientService.proto
 
 import type * as grpc from '@grpc/grpc-js'
 import type { MethodDefinition } from '@grpc/proto-loader'

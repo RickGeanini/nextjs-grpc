@@ -1,4 +1,4 @@
-// Original file: ../grpc/proto/clientService.proto
+// Original file: src/proto/clientService.proto
 
 
 export interface ClientResponse {

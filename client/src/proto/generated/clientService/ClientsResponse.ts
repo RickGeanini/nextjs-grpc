@@ -1,4 +1,4 @@
-// Original file: ../grpc/proto/clientService.proto
+// Original file: src/proto/clientService.proto
 
 import type { ClientResponse as _clientService_ClientResponse, ClientResponse__Output as _clientService_ClientResponse__Output } from '../clientService/ClientResponse';
 
