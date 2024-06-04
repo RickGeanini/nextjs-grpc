@@ -1,9 +1,0 @@
-{
-    "name": "nextjs-grpc",
-    "version": "1.0.0",
-    "license": "MIT",
-    "scripts": {
-        "build": "npx rimraf ./dist && tsc && cp ../grpc/proto/*.proto ./dist/proto",
-        "proto-gen-types": "npx rimraf src/proto/generated && node_modules/.bin/proto-loader-gen-types --longs=String --enums=String --defaults --oneofs --grpcLib=@grpc/grpc-js --outDir=src/proto/generated ../grpc/proto/*.proto"
-    }
-}
