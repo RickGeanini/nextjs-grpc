@@ -7,7 +7,7 @@
         "start": "next start",
         "lint": "next lint",
         "prettier": "prettier --write \"**/*.{ts,tsx,json,yml}\"",
-        "proto-gen-types": "npx rimraf src/proto/generated && node_modules/.bin/proto-loader-gen-types --longs=String --enums=String --defaults --oneofs --grpcLib=@grpc/grpc-js --outDir=src/proto/generated src/proto/*.proto"
+        "proto-gen-types": "npx rimraf src/proto/generated && node_modules/.bin/proto-loader-gen-types --longs=String --enums=String --defaults --oneofs --grpcLib=@grpc/grpc-js --outDir=src/proto/generated ../grpc/proto/*.proto" 
     },
     "dependencies": {
         "@grpc/grpc-js": "1.10.8",
