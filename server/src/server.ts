@@ -2,76 +2,140 @@ import * as grpc from '@grpc/grpc-js';
 import * as protoLoader from '@grpc/proto-loader';
 
 // CLASS
-import { ClientRequest } from './proto/generated/clientService/ClientRequest';
-import { ClientResponse } from './proto/generated/clientService/ClientResponse';
-import { ClientsResponse } from './proto/generated/clientService/ClientsResponse';
-import { ProtoGrpcType } from './proto/generated/clientService';
+import { DinosaurRequest } from './proto/generated/dinosaurService/DinosaurRequest';
+import { DinosaurResponse } from './proto/generated/dinosaurService/DinosaurResponse';
+import { ListDinosaursResponse } from './proto/generated/dinosaurService/ListDinosaursResponse';
+import { NullRequest } from './proto/generated/dinosaurService/NullRequest';
+import { ProtoGrpcType } from './proto/generated/dinosaurService';
 
-const PROTO_PATH = './dist/proto/clientService.proto';
+const PROTO_PATH = './dist/proto/dinosaurService.proto';
+
+// MOCK
+const dinosaursMock: DinosaurResponse[] = [
+  {
+    id: 1,
+    name: 'Tyrannosaurus Rex',
+    period: 'Cretáceo',
+    diet: 'Carnívoro',
+    height: 4.0,
+  },
+  {
+    id: 2,
+    name: 'Triceratops',
+    period: 'Cretáceo',
+    diet: 'Herbívoro',
+    height: 3.0,
+  },
+  {
+    id: 3,
+    name: 'Velociraptor',
+    period: 'Cretáceo',
+    diet: 'Carnívoro',
+    height: 0.5,
+  },
+  {
+    id: 4,
+    name: 'Stegosaurus',
+    period: 'Jurássico',
+    diet: 'Herbívoro',
+    height: 3.0,
+  },
+  {
+    id: 5,
+    name: 'Brachiosaurus',
+    period: 'Jurássico',
+    diet: 'Herbívoro',
+    height: 12.0,
+  },
+  {
+    id: 6,
+    name: 'Spinosaurus',
+    period: 'Cretáceo',
+    diet: 'Carnívoro',
+    height: 6.0,
+  },
+  {
+    id: 7,
+    name: 'Ankylosaurus',
+    period: 'Cretáceo',
+    diet: 'Herbívoro',
+    height: 1.7,
+  },
+  {
+    id: 8,
+    name: 'Diplodocus',
+    period: 'Jurássico',
+    diet: 'Herbívoro',
+    height: 4.3,
+  },
+  {
+    id: 9,
+    name: 'Allosaurus',
+    period: 'Jurássico',
+    diet: 'Carnívoro',
+    height: 3.5,
+  },
+  {
+    id: 10,
+    name: 'Pteranodon',
+    period: 'Cretáceo',
+    diet: 'Carnívoro',
+    height: 1.8,
+  },
+];
 
 /**
  * Suggested options for similarity to loading grpc.load behavior.
  */
 const packageDefinition = protoLoader.loadSync(PROTO_PATH, {
-  keepCase: true,
   defaults: true,
+  keepCase: true,
   oneofs: true,
 });
+
 const protoDescriptor = grpc.loadPackageDefinition(
   packageDefinition
 ) as unknown as ProtoGrpcType;
 
 /**
- * Grab the clientService package from the protobuf file.
+ * Grab the dinosaurService package from the protobuf file.
  */
-const clientService = protoDescriptor.clientService;
-
-const clients = [
-  {
-    id: 1,
-    firstName: 'John',
-    lastName: 'Doe',
-    age: 25,
-    email: 'john.doe@gmail.com',
-    active: true,
-  },
-  {
-    id: 2,
-    firstName: 'Alexander',
-    lastName: 'Angel',
-    age: 26,
-    email: 'alexander.angel@gmail.com',
-    active: true,
-  },
-];
+const dinosaurService = protoDescriptor.dinosaurService;
 
 class gRPC extends grpc.Server {
   constructor() {
     super();
-    this.addService(clientService.ClientServiceRoutes.service, {
-      client: this.getClient,
+    this.addService(dinosaurService.DinosaurServiceRoutes.service, {
+      getDinosaur: this.getDinosaur,
+      listDinosaurs: this.listDinosaurs,
     });
   }
 
   /**
-   * getClient request handler.
+   * getDinosaur request handler.
    */
-  protected getClient(
-    call: grpc.ServerUnaryCall<ClientRequest, ClientResponse>,
-    callback: grpc.sendUnaryData<ClientResponse>
+  protected getDinosaur(
+    call: grpc.ServerUnaryCall<DinosaurRequest, DinosaurResponse>,
+    callback: grpc.sendUnaryData<DinosaurResponse>
   ) {
     const id = call.request.id;
-    const client = clients?.find((client) => client.id === id);
-    callback(null, client);
+    const dinosaur = dinosaursMock?.find((dinosaur) => dinosaur.id === id);
+    callback(null, dinosaur);
   }
 
-  protected getClients(callback: grpc.sendUnaryData<ClientsResponse>) {
-    callback(null, { items: clients });
+  /**
+   * listDinosaurs request handler.
+   */
+  protected listDinosaurs(
+    call: grpc.ServerUnaryCall<NullRequest, ListDinosaursResponse>,
+    callback: grpc.sendUnaryData<ListDinosaursResponse>
+  ) {
+    callback(null, { dinosaurs: dinosaursMock });
   }
 }
 
 /**
- * Starts an RPC server that receives requests for the clientService service at the
+ * Starts an RPC server that receives requests for the dinosaurService service at the
  * sample server port
  */
 function main() {

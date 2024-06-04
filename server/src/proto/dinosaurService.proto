@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package dinosaurService;
+
+message NullRequest {}
+
+message DinosaurRequest {
+    uint32 id = 1;
+}
+
+message DinosaurResponse {
+    uint32 id = 1;
+    string name = 2;
+    string period = 3;
+    string diet = 4;
+    uint32 height = 5;
+
+}
+
+message ListDinosaursResponse {
+    repeated DinosaurResponse dinosaurs = 1;
+}
+
+service DinosaurServiceRoutes {
+    rpc getDinosaur(DinosaurRequest) returns (DinosaurResponse) {}
+    rpc listDinosaurs(NullRequest) returns (ListDinosaursResponse) {}
+}

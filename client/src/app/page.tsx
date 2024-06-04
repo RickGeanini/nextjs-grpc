@@ -1,23 +1,32 @@
 import { Suspense, useMemo } from 'react';
+import Link from 'next/link';
 
 // SERVICES
-import { ClientService } from '@/services/client';
+import { DinosaurService } from '@/services/dinosaur';
 
 export default async function Home() {
     /* Vars */
-    const clientService: ClientService = useMemo(() => {
-        return new ClientService();
+    const dinosaurService: DinosaurService = useMemo(() => {
+        return new DinosaurService();
     }, []);
 
     /* Calls */
-    const { clients } = await clientService.getClients();
-
-    console.log({ clients });
+    const { dinosaurs } = await dinosaurService.getDinosaurs();
 
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <Suspense fallback={<>Loading ...</>}>
-                <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex"></div>
+                <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+                    <ul>
+                        {(dinosaurs?.dinosaurs ?? []).map(dinosaur => {
+                            return (
+                                <li key={dinosaur.id}>
+                                    <Link href={`/dinosaur/${dinosaur.id}`}>{dinosaur.name}</Link>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
             </Suspense>
         </main>
     );
